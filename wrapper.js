@@ -1,0 +1,3 @@
+function wrap() {
+  alert('hello');
+}
