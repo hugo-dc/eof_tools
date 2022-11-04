@@ -1,0 +1,26 @@
+
+body {
+    margin:0;
+}
+.navbar {
+    padding:0 0;
+    background-color: #FFB535;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%), inset 0 -1px 0 rgb(0 0 0 / 15%);
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    margin-top: 60px;
+}
+textarea {
+    resize:none;
+}
+#eof_code {
+    font-family: monospace;
+}
