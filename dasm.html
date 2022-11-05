@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>EOF Disassembler</title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/eip_3540.js"></script>
+    <script src="js/eip_4750.js"></script>
+    <script src="js/dasm.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <h1>EOF Disassembler</h1>
+        </div>
+      </nav>
+    </header>
+    <div class="main-container">
+      <form>
+        <p><label for="eof_bytecode">EOF Bytecode:</label></p>
+        <textarea id="eof_bytecode" rows="10" cols="80"></textarea>
+        <p><button type="button" onclick="dasm()">Disassemble</button></p>
+        <pre id="result"></pre>
+      </form>
+    </div>
+  </body>
+</html>

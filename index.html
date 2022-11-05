@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>EOF Wrapper</title></title>
+    <title>EOF Tools</title></title>
     <link rel="stylesheet" href="css/style.css">
     <script src="wrapper.js"></script>
   </head>
@@ -8,19 +8,15 @@
     <header>
       <nav class="navbar">
         <div class="container">
-          <h1>EOF Wrapper</h1>
+          <h1>EOF Tools</h1>
         </div>
       </nav>
     </header>
     <div class="main-container">
-      <form>
-        <p><label for="eof_data"> Data:</label></p>
-        <textarea id="eof_data" rows="10" cols="80"></textarea>
-        <p><label for="evm_bytecode">EVM Bytecode:</label></p>
-        <textarea id="evm_bytecode" rows="10" cols="80"></textarea>
-        <p><button type="button" onclick="wrap()">Wrap</button></p>
-        <p id="eof_code"></p>
-      </form>
+      <ul>
+        <li><a href="wrapper.html">EOF Wrapper</a>: Combines input data and EVM Bytecode into EOF Code</li>
+        <li><a href="dasm.html">EOF Disassembler</a>: Extracts information from EOF Bytecode</li>
+      </ul>
     </div>
   </body>
 </html>
