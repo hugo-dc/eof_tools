@@ -8,7 +8,7 @@ function clean_data(data) {
   data.replace(" ", "");
 
   if (data.substring(0, 2) == "0x") {
-    data = eof_data.substring(2, data.length);
+    data = data.substring(2, data.length);
   }
 
   data = data.toUpperCase();
@@ -24,11 +24,7 @@ function consume(code, length) {
 
 function is_valid_eof(code) {
   if (is_eof(code)) { // EIP-3540
-    try {
-      validate_eof(code); // 4750
-    } catch (err) {
-      return false;
-    }
+    validate_eof(code); // 4750
     return true;
   } else {
     return false;
@@ -118,7 +114,11 @@ function disassemble_eof(code) {
 function dasm() {
   var eof_bytecode = clean_data(document.getElementById("eof_bytecode").value);
 
-  if (eof_bytecode.length != 0 && !valid_hex(eof_bytecode)) {
+  if (eof_bytecode.length == 0) {
+    return;
+  }
+
+  if (!valid_hex(eof_bytecode)) {
     alert("EOF Bytecode is not a valid hex string");
     return;
   }
