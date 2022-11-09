@@ -107,7 +107,7 @@ function disassemble_eof(code) {
       return {"version": version, "sections": sections};
     }
   } catch (err) {
-    return "Error: " + err;
+    return { "error": "Error: " + err };
   }
 }
 
@@ -128,20 +128,23 @@ function dasm() {
     return;
   }
 
-  var result = disassemble_eof(eof_bytecode);
   var message = "";
-  // Validate code sections
-  for (var i = 0; i < result["sections"].length; i++) {
-    if (Object.keys(result["sections"][i])[0] == "Code") {
-      var code = result["sections"][i]["Code"]["code"];
-      try {
-        validate_code(code)
-      } catch (err) {
-        message += "Error: " + err + " - code: " + code + "\n";
+  var result = disassemble_eof(eof_bytecode);
+
+  if (result["error"] != undefined) {
+  } else {
+    // Validate code sections
+    for (var i = 0; i < result["sections"].length; i++) {
+      if (Object.keys(result["sections"][i])[0] == "Code") {
+        var code = result["sections"][i]["Code"]["code"];
+        try {
+          validate_code(code)
+        } catch (err) {
+          message += "Error: " + err + " - code: " + code + "\n";
+        }
       }
     }
   }
-
   document.getElementById("result").innerText = JSON.stringify(result, null, 2);
   document.getElementById("message").innerText = message;
 }
