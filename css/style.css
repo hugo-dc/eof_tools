@@ -24,3 +24,7 @@ textarea {
 #eof_code {
     font-family: monospace;
 }
+
+pre {
+  max-width: 500px;
+}

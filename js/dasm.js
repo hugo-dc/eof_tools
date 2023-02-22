@@ -63,10 +63,10 @@ function disassemble_eof(code) {
       code = result[1];
 
       // Get section header
-      var section_names = { "01": "Code", "02": "Data", "03": "Types" };
+      var section_names = { "01": "Types", "02": "Code", "03": "Data" };
       var section_defs = [];
       result = consume(code, 1);
-      var section = result[0]// parseInt(result[0], 16);
+      var section = result[0]
       code = result[1];
 
       while (section != S_TERMINATOR) {
@@ -75,7 +75,17 @@ function disassemble_eof(code) {
         code = result[1];
 
         var sd = {};
-        sd[section_names[section]] = { "length" : length };
+        if (section == S_CODE) {
+          sd[section_names[section]] = {};
+          for (var i = 0; i < length; i++) {
+            result = consume(code, 2);
+            var code_len = parseInt(result[0], 16);
+            code = result[1];
+            sd[section_names[section]][i] = { "length" : code_len };
+          }
+        } else {
+          sd[section_names[section]] = { "length" : length };
+        }
         section_defs.push(sd);
         result = consume(code, 1);
         section = result[0];
@@ -87,22 +97,41 @@ function disassemble_eof(code) {
       for (var i = 0; i < section_defs.length; i++) {
         var section = section_defs[i];
         var section_id = Object.keys(section)[0];
-        var section_len = section[section_id]['length'];
-        
-        result = consume(code, section_len);
-        var content = result[0];
-        code = result[1];
 
-        var sec = {};
-        var sec_content = {};
-        sec_content["length"] = section_len;
-        if (section_id == "Types") {
-          sec_content["ios"] = get_types_io(content);
+        if (section_id == "Code") {
+          var sec_content = {};
+          for (var j = 0; j < Object.keys(section[section_id]).length; j++) { 
+            var code_len = section[section_id][j]['length'];
+            result = consume(code, code_len);
+            var content = result[0];
+            code = result[1];
+
+            var sec = {};
+            sec_content[j] = {};
+            sec_content[j]["length"] = code_len;
+            sec_content[j]["code"] = content;
+          }
+          sec["Code"] = sec_content;
+          sections.push(sec);
+
         } else {
-          sec_content[section_id.toLowerCase()] = content;
+          var section_len = section[section_id]['length'];
+          
+          result = consume(code, section_len);
+          var content = result[0];
+          code = result[1];
+
+          var sec = {};
+          var sec_content = {};
+          sec_content["length"] = section_len;
+          if (section_id == "Types") {
+            sec_content["ios"] = get_types_io(content);
+          } else {
+            sec_content[section_id.toLowerCase()] = content;
+          }
+          sec[section_id] = sec_content;
+          sections.push(sec);
         }
-        sec[section_id] = sec_content;
-        sections.push(sec);
       }
       return {"version": version, "sections": sections};
     }
@@ -136,11 +165,13 @@ function dasm() {
     // Validate code sections
     for (var i = 0; i < result["sections"].length; i++) {
       if (Object.keys(result["sections"][i])[0] == "Code") {
-        var code = result["sections"][i]["Code"]["code"];
-        try {
-          validate_code(code)
-        } catch (err) {
-          message += "Error: " + err + " - code: " + code + "\n";
+        for (var j = 0; j < Object.keys(result["sections"][i]["Code"]).length; j++) {
+          var code = result["sections"][i]["Code"][j]["code"];
+          try {
+            validate_code(code)
+          } catch (err) {
+            message += "Error: " + err + " - code: " + code + "\n";
+          }
         }
       }
     }
